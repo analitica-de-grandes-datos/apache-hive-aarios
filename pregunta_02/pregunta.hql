@@ -13,15 +13,20 @@ Escriba el resultado a la carpeta `output` de directorio de trabajo.
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
-DROP TABLE IF EXISTS tabla_p2;
-CREATE TABLE tabla_p2 (letra STRING, fecha STRING, numero INT)
-ROW FORMAT delimited fields terminated by '\t';
+DROP TABLE IF EXISTS data;
 
-LOAD DATA LOCAL INPATH "data.tsv" OVERWRITE INTO TABLE tabla_p2;
+CREATE TABLE data (
+letter STRING,
+date_event STRING,
+value INT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY  '\t';
+
+LOAD DATA LOCAL INPATH 'data.tsv' OVERWRITE INTO TABLE data;
 
 INSERT OVERWRITE DIRECTORY 'output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
 SELECT *
-FROM tabla_p2
-ORDER BY letra, numero
-;
+FROM data
+ORDER BY letter, value, date_event;
