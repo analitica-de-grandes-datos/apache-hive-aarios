@@ -35,6 +35,7 @@ CREATE TABLE tbl1 (
     c3 STRING,
     c4 MAP<STRING, INT>
 )
+
 ROW FORMAT DELIMITED 
 FIELDS TERMINATED BY ','
 COLLECTION ITEMS TERMINATED BY ':'
@@ -46,3 +47,13 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
+DROP TABLE IF EXISTS pregunta;
+CREATE TABLE pregunta 
+AS 
+        SELECT c2, CONCAT_WS(':',COLLECT_LIST(CAST(c1 AS STRING))) as numbers
+        FROM tbl0
+        GROUP BY c2;
+INSERT OVERWRITE LOCAL DIRECTORY './output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT *
+FROM pregunta;
